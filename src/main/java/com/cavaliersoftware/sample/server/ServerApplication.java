@@ -15,29 +15,32 @@ import java.util.BitSet;
  * Time: 3:59 AM
  * <p>
  */
-public class Application {
+public class ServerApplication {
 
     public static void main( String[] args ) {
-        System.out.println( "Hello, World!" );
         int data = 0x0006; // 0000:0110
 
-        BitSet bitSet = new BitSet( 8 );
-        bitSet.set( 1, 3 );
-
-        System.out.println( bitSet );
+//        BitSet bitSet = new BitSet( 8 );
+//        bitSet.set( 1, 3 );
+//
+//        System.out.println( bitSet );
 
         // create a socket server
         int portNumber = 9999;
         if ( args.length > 0  ) {
             portNumber = Integer.parseInt( args[ 0 ] );
         }
+        // start a socket server
+        System.out.println( "Starting Server to listen for client requests...." );
         try {
             ServerSocket serverSocket = new ServerSocket( portNumber );
-            Socket clientSocket = serverSocket.accept();
-            OutputStream outputStream = clientSocket.getOutputStream();
-            outputStream.write( data );
-            outputStream.flush(); // does nothing, but keep here in case we upgrade
-            outputStream.close();
+            while ( true ) { // come up with a better way to stop
+                Socket clientSocket = serverSocket.accept();
+                System.out.println( "-- Accepted client connection" );
+                // todo - use Thread Pool Executor
+                ClientDataHandler handler = new ClientDataHandler( clientSocket );
+                new Thread( handler ).run();
+            }
         } catch ( Exception ex ) {
             ex.printStackTrace(); // todo - logging later
         }

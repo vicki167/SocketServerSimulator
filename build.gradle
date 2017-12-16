@@ -8,7 +8,7 @@ apply plugin: 'application'
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
 
-mainClassName = 'com.cavaliersoftware.sample.server.Application'
+mainClassName = 'com.cavaliersoftware.sample.server.ServerApplication'
 
 repositories {
     mavenCentral()
@@ -22,6 +22,6 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.cavaliersoftware.sample.server.Application'
+        attributes 'Main-Class': 'com.cavaliersoftware.sample.server.ServerApplication'
     }
 }
