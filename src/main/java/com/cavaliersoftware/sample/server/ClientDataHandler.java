@@ -1,8 +1,14 @@
 package com.cavaliersoftware.sample.server;
 
+import com.cavaliersoftware.sample.util.GeoUtility;
+import com.cavaliersoftware.sample.util.MaskUtility;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.List;
+
+import static com.cavaliersoftware.sample.util.GeoUtility.WORLD;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,27 +19,60 @@ import java.net.Socket;
  */
 public class ClientDataHandler implements Runnable {
 
+
     private Socket client;
+    private boolean running = true;
+    private MaskUtility maskUtility;
+    private GeoUtility geoUtility;
 
     public ClientDataHandler( Socket client ) {
         super();
         this.client = client;
+        this.maskUtility = new MaskUtility();
+        this.geoUtility = new GeoUtility();
     }
 
     public void run() {
-        int data = 0x0006;
 
         try {
+
+            EarthquakeQuery earthquakeQuery = new EarthquakeQuery();
+
             System.out.println( "-- Sending data" );
             OutputStream outputStream = client.getOutputStream();
-            
-            outputStream.write( data );
-            outputStream.flush(); // does nothing, but keep here in case we upgrade
+
+            // every 30s, send some data if necessary
+            while ( running ) {
+                int data = 0x00;
+                // get the latest earthquake data
+                List<double[]> points = earthquakeQuery.getEarthquakePoints();
+                // set the first flag for the world if we have any data
+                if ( points.size() > 0 ) {
+                    data = maskUtility.turnBitOn( data, WORLD );
+                }
+                // set the bit flag for the appropriate continents
+                for ( double[] point : points ) {
+                    // break out of the loop if all the bits are flipped
+                    if ( data == 0x0FF ) {
+                        break;
+                    }
+                    data = maskUtility.turnBitOn( data, geoUtility.getFlagForPoint( point ) );
+                }
+                outputStream.write( data );
+                // pause the Thread to wait before checking and sending again
+                try {
+                    Thread.sleep( 30000 );   // 30 seconds
+                } catch ( InterruptedException e ) {
+                    // end loop if we get cancelled
+                    running = false;
+                }
+            }
+
             outputStream.close();
         } catch ( IOException ex ) {
             ex.printStackTrace(); // todo - logging later
         }
-
     }
+
 
 }

@@ -7,6 +7,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.BitSet;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,29 +20,38 @@ import java.util.BitSet;
  */
 public class ServerApplication {
 
+    private static int PORT_NUMBER = 9999;
+    private ThreadPoolExecutor executor;
+    private boolean running = true;
+
+    public ServerApplication() {
+        super();
+        executor = new ThreadPoolExecutor( 5, 10, 30,
+                TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>( 10 ) );
+    }
+
+
+
     public static void main( String[] args ) {
-        int data = 0x0006; // 0000:0110
-
-//        BitSet bitSet = new BitSet( 8 );
-//        bitSet.set( 1, 3 );
-//
-//        System.out.println( bitSet );
-
-        // create a socket server
-        int portNumber = 9999;
+        PORT_NUMBER = 9999;
         if ( args.length > 0  ) {
-            portNumber = Integer.parseInt( args[ 0 ] );
+            PORT_NUMBER = Integer.parseInt( args[ 0 ] );
         }
-        // start a socket server
+        // create the actual application
+        ServerApplication application = new ServerApplication();
+        application.start();
+
+    }
+
+    private void start() {
         System.out.println( "Starting Server to listen for client requests...." );
         try {
-            ServerSocket serverSocket = new ServerSocket( portNumber );
-            while ( true ) { // come up with a better way to stop
+            ServerSocket serverSocket = new ServerSocket( PORT_NUMBER );
+            while ( running ) { // come up with a better way to stop
                 Socket clientSocket = serverSocket.accept();
                 System.out.println( "-- Accepted client connection" );
-                // todo - use Thread Pool Executor
                 ClientDataHandler handler = new ClientDataHandler( clientSocket );
-                new Thread( handler ).run();
+                executor.execute( handler );
             }
         } catch ( Exception ex ) {
             ex.printStackTrace(); // todo - logging later
