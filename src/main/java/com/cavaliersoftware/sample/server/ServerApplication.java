@@ -50,7 +50,7 @@ public class ServerApplication {
             while ( running ) { // come up with a better way to stop
                 Socket clientSocket = serverSocket.accept();
                 System.out.println( "-- Accepted client connection" );
-                ClientDataHandler handler = new ClientDataHandler( clientSocket );
+                ClientDataHandler handler = new ClientDataHandler( clientSocket, new USGSEarthquakeQuery() );
                 executor.execute( handler );
             }
         } catch ( Exception ex ) {

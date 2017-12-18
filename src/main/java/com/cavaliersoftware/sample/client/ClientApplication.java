@@ -21,6 +21,7 @@ public class ClientApplication {
     private List<MaskListener> listeners;
     private ClientFrame frame;
     private boolean running = true;
+    private int mask = -1;
 
 
     public ClientApplication() {
@@ -43,10 +44,13 @@ public class ClientApplication {
                 result = byteData.get( 0 );
 
                 // alert the UI (or any listeners)
-                MaskEvent event = new MaskEvent();
-                event.setBitMask( result );
-                for ( MaskListener listener : listeners ) {
-                    listener.bitChanged( event );
+                if ( mask != result ) {
+                    mask = result;
+                    MaskEvent event = new MaskEvent();
+                    event.setBitMask( result );
+                    for ( MaskListener listener : listeners ) {
+                        listener.bitChanged( event );
+                    }
                 }
             }
             if ( client != null ) {

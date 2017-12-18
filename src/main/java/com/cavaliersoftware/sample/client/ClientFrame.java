@@ -24,7 +24,7 @@ public class ClientFrame extends JFrame implements MaskListener {
      * Launches window that will highlight the example
      */
     public ClientFrame( ) throws HeadlessException {
-        super( "Bit Mask" );
+        super( "Red denotes an earthquake has occurred" );
         setLocationRelativeTo(null);
         setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         initUI();
@@ -50,7 +50,7 @@ public class ClientFrame extends JFrame implements MaskListener {
 
     private void createLabel( JPanel panel, int position, String text ) {
         JLabel label = new JLabel( text );
-        label.setBackground( Color.RED );
+        label.setBackground( OFF );
         label.setForeground( Color.WHITE );
         label.setOpaque( true );
         panel.add( label );
@@ -71,12 +71,20 @@ public class ClientFrame extends JFrame implements MaskListener {
     }
 
 
+    /**
+     * Packs this instance of a JFrame to the appropriate size and sets it visible.
+     */
     public void showIt() {
         this.pack();
         this.setVisible( true );
 
     }
 
+    /**
+     * Called when MaskEvents are created.  If the bitmask has changed, the appropriate UI labels are modified.
+     * 
+     * @param event
+     */
     public void bitChanged( MaskEvent event ) {
         int mask = event.getBitMask();
         for ( int i = 0; i< 8; i++ ) {

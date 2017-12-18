@@ -62,7 +62,7 @@ public class GeoUtility {
     }
 
     public int getFlagForPoint( double[] point ) {
-        int returnVal = -1;
+        int returnVal = WORLD; // since this is a flag for the world, it is fine to return 0 if nothing else is identified
         if ( isInAntarctica( point ) ) {
             returnVal = ANTARCTICA;
         } else if ( isInAfrica( point ) ) {

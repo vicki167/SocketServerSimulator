@@ -21,13 +21,15 @@ public class ClientDataHandler implements Runnable {
 
 
     private Socket client;
+    private EarthquakeQuery earthquakeQuery;
     private boolean running = true;
     private MaskUtility maskUtility;
     private GeoUtility geoUtility;
 
-    public ClientDataHandler( Socket client ) {
+    public ClientDataHandler( Socket client, EarthquakeQuery earthquakeQuery  ) {
         super();
         this.client = client;
+        this.earthquakeQuery = earthquakeQuery;
         this.maskUtility = new MaskUtility();
         this.geoUtility = new GeoUtility();
     }
@@ -36,9 +38,8 @@ public class ClientDataHandler implements Runnable {
 
         try {
 
-            EarthquakeQuery earthquakeQuery = new EarthquakeQuery();
-
-            System.out.println( "-- Sending data" );
+            System.out.println( "-- Opening output stream to client socket" );
+            // get the output stream from the socket
             OutputStream outputStream = client.getOutputStream();
 
             // every 30s, send some data if necessary
@@ -58,6 +59,7 @@ public class ClientDataHandler implements Runnable {
                     }
                     data = maskUtility.turnBitOn( data, geoUtility.getFlagForPoint( point ) );
                 }
+                System.out.println( "-- Sending data to the client" );
                 outputStream.write( data );
                 // pause the Thread to wait before checking and sending again
                 try {
@@ -73,6 +75,5 @@ public class ClientDataHandler implements Runnable {
             ex.printStackTrace(); // todo - logging later
         }
     }
-
 
 }

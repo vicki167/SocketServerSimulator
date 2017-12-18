@@ -96,6 +96,7 @@ public class GeoUtilityTest {
     @Test
     public void getFlagForPoint( ) {
         GeoUtility util = new GeoUtility();
+        assertEquals( GeoUtility.WORLD, util.getFlagForPoint( new double[] { -40.0, 180.0 } ) );
         assertEquals( GeoUtility.EUROPE, util.getFlagForPoint( new double[] { 50.0, 50.0 } ) );
         assertEquals( GeoUtility.ASIA, util.getFlagForPoint( new double[] { 50.0, 99.0 } ) );
         assertEquals( GeoUtility.AFRICA, util.getFlagForPoint( new double[] { 10.0, 20.0 } ) );
