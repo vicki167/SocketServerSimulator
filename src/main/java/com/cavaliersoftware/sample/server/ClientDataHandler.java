@@ -56,7 +56,7 @@ public class ClientDataHandler implements Runnable {
                     if ( data == 0x0FF ) {
                         break;
                     }
-                    data = maskUtility.turnBitOn( data, geoUtility.getFlagForPoint( point ) );
+                    data = maskUtility.turnBitOn( data, geoUtility.getBitForPoint( point ) );
                 }
                 System.out.println( String.format( "-- Sending data to the client on Thread %s", Thread.currentThread().getName() ) );
                 outputStream.write( data );

@@ -11,6 +11,7 @@ import java.io.*;
  * Date: 12/19/17
  * Time: 11:37 AM
  * <p>
+ * A listener that writes the data to a CSV file.
  */
 public class CSVMaskListener implements MaskListener {
 
@@ -18,6 +19,11 @@ public class CSVMaskListener implements MaskListener {
     private BufferedWriter writer;
     private MaskUtility maskUtility;
 
+    /**
+     * Creates the listener using the file passed in as a parameter
+     * @param outputFile  the file where the data should be written
+     * @throws IOException thrown if any errors are encountered creating or writing the file
+     */
     public CSVMaskListener( File outputFile ) throws IOException {
         super();
         System.out.println( String.format( "Using file : %s", outputFile.getAbsolutePath() ));
@@ -29,6 +35,10 @@ public class CSVMaskListener implements MaskListener {
         writer.newLine();
     }
 
+    /**
+     * Handles a MaskEvent.  If the event is equal to the minimum integer value, the writer will be flushed and then closed.
+     * @param event  the event to process
+     */
     @Override
     public void bitChanged( MaskEvent event ) {
         try {
@@ -65,8 +75,15 @@ public class CSVMaskListener implements MaskListener {
     private void writeData( String data ) throws IOException {
         writer.write( data );
         writer.newLine();
+        writer.flush(); // go ahead and flush the data since we do not expect this to bec alled too often
     }
 
+    /**
+     * Returns a character based on if the bit is on or off in the mask.
+     * @param mask the bitmask to evaluate
+     * @param bitNum the number of the bit to check
+     * @return  a "1" if the bit is on and a "0" if the bit is off
+     */
     public String getCharacterForBit( int mask, int bitNum ) {
         return maskUtility.isBitOn( mask, bitNum ) ? "1" : "0";
     }

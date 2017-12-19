@@ -96,14 +96,14 @@ public class GeoUtilityTest {
     @Test
     public void getFlagForPoint( ) {
         GeoUtility util = new GeoUtility();
-        assertEquals( GeoUtility.WORLD, util.getFlagForPoint( new double[] { -40.0, 180.0 } ) );
-        assertEquals( GeoUtility.EUROPE, util.getFlagForPoint( new double[] { 50.0, 50.0 } ) );
-        assertEquals( GeoUtility.ASIA, util.getFlagForPoint( new double[] { 50.0, 99.0 } ) );
-        assertEquals( GeoUtility.AFRICA, util.getFlagForPoint( new double[] { 10.0, 20.0 } ) );
-        assertEquals( GeoUtility.AUSTRALIA, util.getFlagForPoint( new double[] { -30.0, 140.0  } ) );
-        assertEquals( GeoUtility.SOUTH_AMERICA, util.getFlagForPoint( new double[] {  -10.0, -60.0  } ) );
-        assertEquals( GeoUtility.NORTH_AMERICA, util.getFlagForPoint( new double[] {  15.0, -80.0  } ) );
-        assertEquals( GeoUtility.ANTARCTICA, util.getFlagForPoint( new double[] {  -85.0, -100.0  } ) );
+        assertEquals( GeoUtility.WORLD, util.getBitForPoint( new double[] { -40.0, 180.0 } ) );
+        assertEquals( GeoUtility.EUROPE, util.getBitForPoint( new double[] { 50.0, 50.0 } ) );
+        assertEquals( GeoUtility.ASIA, util.getBitForPoint( new double[] { 50.0, 99.0 } ) );
+        assertEquals( GeoUtility.AFRICA, util.getBitForPoint( new double[] { 10.0, 20.0 } ) );
+        assertEquals( GeoUtility.AUSTRALIA, util.getBitForPoint( new double[] { -30.0, 140.0  } ) );
+        assertEquals( GeoUtility.SOUTH_AMERICA, util.getBitForPoint( new double[] {  -10.0, -60.0  } ) );
+        assertEquals( GeoUtility.NORTH_AMERICA, util.getBitForPoint( new double[] {  15.0, -80.0  } ) );
+        assertEquals( GeoUtility.ANTARCTICA, util.getBitForPoint( new double[] {  -85.0, -100.0  } ) );
 
     }
 

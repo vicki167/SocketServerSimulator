@@ -23,6 +23,8 @@ an important thing to add for a "real" application.
 style comms.  I can update if desired.  Paul had mentioned working with older versions of the JDK, so
 I wanted to have some "old school" code in the example
 * The unit testing could be more complete and test more error conditions
+* Some methods were left public even if their access could be more restrictive for this sample.  This is
+done to ease testing and maintain an API that could be used in the future.
 
 ## Build instructions
 

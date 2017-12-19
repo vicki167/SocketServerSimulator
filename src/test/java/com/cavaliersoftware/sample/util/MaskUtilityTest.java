@@ -34,6 +34,12 @@ public class MaskUtilityTest {
         assertTrue( util.isBitOn( 0x40, 6 ) );
         // 1000:0000 = 128
         assertTrue( util.isBitOn( 0x80, 7 ) );
+         // return false for anything above 7
+        assertFalse( util.isBitOn( 0x80, 8 ) );
+        assertFalse( util.isBitOn( 0x80, Integer.MAX_VALUE ) );
+         // return false for anything below 0
+        assertFalse( util.isBitOn( 0x80, -1) );
+        assertFalse( util.isBitOn( 0x80, Integer.MIN_VALUE ) );
     }
 
     @Test
@@ -82,5 +88,18 @@ public class MaskUtilityTest {
         assertTrue( util.isBitOn( result, 5 ) );
         assertTrue( util.isBitOn( result, 6 ) );
         assertTrue( util.isBitOn( result, 7 ) );
+        
+        // do nothing for bits above 7
+        result = util.turnBitOn( 0x00, 8 );
+        assertEquals( 0x00, result );
+        result = util.turnBitOn( 0x00, Integer.MAX_VALUE );
+        assertEquals( 0x00, result );
+
+        // do nothing for bits below 0
+        result = util.turnBitOn( 0x00, 8 );
+        assertEquals( 0x00, result );
+        result = util.turnBitOn( 0x00, Integer.MAX_VALUE );
+        assertEquals( 0x00, result );
+
     }
 }
