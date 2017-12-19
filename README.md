@@ -3,8 +3,8 @@
 Simple socket server for generating and sending binary data.  The USGS Earthquake
 Web Service is queried and a bit mask is computed denoting if an earthquake has
 occurred for each continent. The client makes a connection to the server and listens for any updates
-and updates a UI based on the data received.  Because the notification mechanism for the UI uses
-listeners, it is possible to have other "things" updated based on the data.  For example, a 
+and updates a UI and a CSV file based on the data received.  Because the notification mechanism uses
+listeners, it is possible to have other "things" updated based on the data such as a 
 listener that prints to the console or one that turns on LEDs attached to the GPIO pins of a
 RaspberryPi.
 

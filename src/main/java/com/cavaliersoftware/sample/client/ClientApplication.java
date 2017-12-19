@@ -123,6 +123,7 @@ public class ClientApplication extends WindowAdapter {
         // tell the listeners we are done
         alertListeners( new MaskEvent( Integer.MIN_VALUE ) );
         running = false;
+        // close the socket
         if ( socket != null ) {
             try {
                 socket.close();
