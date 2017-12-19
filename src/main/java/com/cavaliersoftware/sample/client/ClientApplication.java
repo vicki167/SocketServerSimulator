@@ -47,6 +47,7 @@ public class ClientApplication extends WindowAdapter {
                 if ( is.available() > -1 ) { // in our example, we are only dealing with one byte, so read one and handle
                     // read the one byte
                     result = is.read();
+                    System.out.println( String.format( "--- Read data : %s", result )  );
                 }
 
                 // alert the UI (or any other listeners) but only if the data has changed
