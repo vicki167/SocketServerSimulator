@@ -19,7 +19,6 @@ import static com.cavaliersoftware.sample.util.GeoUtility.WORLD;
  */
 public class ClientDataHandler implements Runnable {
 
-
     private Socket client;
     private EarthquakeQuery earthquakeQuery;
     private boolean running = true;
@@ -59,7 +58,7 @@ public class ClientDataHandler implements Runnable {
                     }
                     data = maskUtility.turnBitOn( data, geoUtility.getFlagForPoint( point ) );
                 }
-                System.out.println( "-- Sending data to the client" );
+                System.out.println( String.format( "-- Sending data to the client on Thread %s", Thread.currentThread().getName() ) );
                 outputStream.write( data );
                 // pause the Thread to wait before checking and sending again
                 try {
@@ -69,10 +68,15 @@ public class ClientDataHandler implements Runnable {
                     running = false;
                 }
             }
-
-            outputStream.close();
         } catch ( IOException ex ) {
-            ex.printStackTrace(); // todo - logging later
+            System.out.println( String.format( "-- Error on Thread %s :",  Thread.currentThread().getName() ) );
+            System.out.println( "---- " + ex.getMessage() );
+        } finally {
+            try {
+                client.close();
+            } catch ( IOException e ) {
+                // ok to ignore
+            }
         }
     }
 

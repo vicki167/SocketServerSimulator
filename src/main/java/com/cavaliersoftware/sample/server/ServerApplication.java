@@ -1,9 +1,6 @@
 package com.cavaliersoftware.sample.server;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.BitSet;
@@ -40,13 +37,13 @@ public class ServerApplication {
         // create the actual application
         ServerApplication application = new ServerApplication();
         application.start();
-
     }
 
     private void start() {
         System.out.println( "Starting Server to listen for client requests...." );
+        ServerSocket serverSocket = null;
         try {
-            ServerSocket serverSocket = new ServerSocket( PORT_NUMBER );
+            serverSocket = new ServerSocket( PORT_NUMBER );
             while ( running ) { // come up with a better way to stop
                 Socket clientSocket = serverSocket.accept();
                 System.out.println( "-- Accepted client connection" );
@@ -54,7 +51,15 @@ public class ServerApplication {
                 executor.execute( handler );
             }
         } catch ( Exception ex ) {
-            ex.printStackTrace(); // todo - logging later
+            ex.printStackTrace();
+        } finally {
+            try {
+                if ( serverSocket != null ) {
+                    serverSocket.close();
+                }
+            } catch ( IOException e ) {
+                // ok to ignore
+            }
         }
 
     }

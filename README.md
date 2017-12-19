@@ -1,8 +1,12 @@
 # Socket Server Simulator
 
 Simple socket server for generating and sending binary data.  The USGS Earthquake
-Web Service is queries and a bit mask is computed denoting if an earthquake has
-occurred for each continent. 
+Web Service is queried and a bit mask is computed denoting if an earthquake has
+occurred for each continent. The client makes a connection to the server and listens for any updates
+and updates a UI based on the data received.  Because the notification mechanism for the UI uses
+listeners, it is possible to have other "things" updated based on the data.  For example, a 
+listener that prints to the console or one that turns on LEDs attached to the GPIO pins of a
+RaspberryPi.
 
 The server runs on port 9999 by default.  This may be changed by passing in a port
 number as an argument to the application.
@@ -10,6 +14,15 @@ number as an argument to the application.
 The client tries by default to connect to port 9999 on the loopback address.  This may 
 be changed by passing in the hostname and port number as the first two arguments to 
 the application.
+
+Some design notes :
+* I did not worry about setting up logging.  Instead, I just printed to System.out
+* I chose not to read some of the configurable fields from a properties file.  That would be
+an important thing to add for a "real" application.
+* I did not use the Java NIO package to construct this demo.  Instead, I went wtih the older 
+style comms.  I can update if desired.  Paul had mentioned working with older versions of the JDK, so
+I wanted to have some "old school" code in the example
+* The unit testing could be more complete and test more error conditions
 
 ## Build instructions
 
