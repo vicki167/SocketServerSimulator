@@ -11,6 +11,15 @@ public class MaskEvent {
 
     private int bitMask = 0;
 
+    public MaskEvent( int bitMask ) {
+        this();
+        this.bitMask = bitMask;
+    }
+
+    public MaskEvent() {
+        
+    }
+
     public int getBitMask() {
         return bitMask;
     }

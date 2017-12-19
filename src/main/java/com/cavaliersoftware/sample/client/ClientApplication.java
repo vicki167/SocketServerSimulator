@@ -3,10 +3,10 @@ package com.cavaliersoftware.sample.client;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,6 @@ public class ClientApplication extends WindowAdapter {
         try {
 
             int result = -1;
-
-
             socket = new Socket( HOST_NAME, PORT );
             BufferedInputStream is = new BufferedInputStream( socket.getInputStream() );
             while ( running ) {
@@ -51,14 +49,12 @@ public class ClientApplication extends WindowAdapter {
                     result = is.read();
                 }
 
-                // alert the UI (or any other listeners)
+                // alert the UI (or any other listeners) but only if the data has changed
                 if ( mask != result ) {
                     mask = result;
                     MaskEvent event = new MaskEvent();
                     event.setBitMask( result );
-                    for ( MaskListener listener : listeners ) {
-                        listener.bitChanged( event );
-                    }
+                    alertListeners( event );
                 }
                 if ( client != null ) {
                     client.close();
@@ -66,6 +62,14 @@ public class ClientApplication extends WindowAdapter {
             }
         } catch ( Exception e ) {
             e.printStackTrace();
+        }
+    }
+
+    public void alertListeners( MaskEvent event ) {
+        for ( MaskListener listener : listeners ) {
+            if ( listener != null ) {
+                listener.bitChanged( event );
+            }
         }
     }
 
@@ -90,10 +94,21 @@ public class ClientApplication extends WindowAdapter {
 
         // create the Application
         ClientApplication application = new ClientApplication();
-        application.addMaskListener( frame );
-        frame.addWindowListener( application );
-        application.connectAndListen();
+        application.addMaskListener( frame ); // Register the frame as a listener to events
 
+        try {
+            // create the listener to write the data to a file
+            File file = new File( "earthquakes.csv" );
+            if ( file.exists() ) {
+                file.delete();
+            }
+            CSVMaskListener csvMaskListener = new CSVMaskListener( file );
+            application.addMaskListener( csvMaskListener ); // Register the frame as a listener to events
+        } catch ( Exception e ) {
+            System.out.println( "Due to error, data will not be written to a file" );
+        }
+        frame.addWindowListener( application );  // Register the application as a listener to the frame close event
+        application.connectAndListen(); // start listening for events
     }
 
     /**
@@ -105,14 +120,9 @@ public class ClientApplication extends WindowAdapter {
     public void windowClosing( WindowEvent e ) {
         super.windowClosing( e );
         System.out.println( "Closing client based on Window Closing" );
+        // tell the listeners we are done
+        alertListeners( new MaskEvent( Integer.MIN_VALUE ) );
         running = false;
-        if ( client != null ) {
-            try {
-                client.close();
-            } catch ( IOException e1 ) {
-                // ok to ignore
-            }
-        }
         if ( socket != null ) {
             try {
                 socket.close();
