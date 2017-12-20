@@ -87,7 +87,7 @@ public class ClientFrame extends JFrame implements MaskListener {
         int mask = event.getBitMask();
         // handle if this gets the "end" flag
         if ( mask == Integer.MIN_VALUE ) {
-            this.setTitle( "Not currently Receiving Data" );
+            this.setTitle( "Not Currently Receiving Data" );
         } else {
             for ( int i = 0; i < 8; i++ ) {
                 updateLabel( i, utility.isBitOn( mask, i ) );
