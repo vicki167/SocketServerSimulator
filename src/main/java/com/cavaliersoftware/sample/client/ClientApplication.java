@@ -27,7 +27,6 @@ public class ClientApplication extends WindowAdapter {
     private ClientFrame frame;
     private boolean running = true;
     private int mask = -1;
-    private SocketChannel client = null;
     private Socket socket;
 
 
@@ -48,6 +47,10 @@ public class ClientApplication extends WindowAdapter {
                     // read the one byte
                     result = is.read();
                     System.out.println( String.format( "--- Read data : %s", result )  );
+                    // if we read -1, quit out of the loop
+                    if ( result == -1 ) {
+                        running = false;
+                    }
                 }
 
                 // alert the UI (or any other listeners) but only if the data has changed
@@ -57,10 +60,8 @@ public class ClientApplication extends WindowAdapter {
                     event.setBitMask( result );
                     alertListeners( event );
                 }
-                if ( client != null ) {
-                    client.close();
-                }
             }
+            socket.close();
         } catch ( Exception e ) {
             e.printStackTrace();
         }

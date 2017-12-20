@@ -33,7 +33,7 @@ public class USGSEarthquakeQuery implements EarthquakeQuery {
      * @return  an array with the latitude at index position 0 and the longitude at index position 1
      * @throws MalformedURLException
      */
-    public List<double[]> getEarthquakePoints() throws MalformedURLException {
+    public List<double[]> getEarthquakePoints() {
         List<double[]> points = new ArrayList<double[]>(  ); // return val
         // retrieve the geo json features for each earthquake
         List features = getFeatures();
@@ -60,19 +60,24 @@ public class USGSEarthquakeQuery implements EarthquakeQuery {
         return points;
     }
 
-    private List getFeatures() throws MalformedURLException {
-        // read in json from the USGS earthquake feed to bring back the earthquakes over mag 5 in the last 30 days
-        Object obj = slurper.parse(
-                new URL( "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=300&minmagnitude=5" ) ); // limited to 300 just incase
-
-        // search for the features and extract
+    private List getFeatures()  {
         List features = null;
-        if ( obj instanceof Map ) {
-            Map jsonMap = ( Map ) obj;
-            // get the features
-            if ( jsonMap.containsKey( "features" ) ) {
-                features = ( List ) jsonMap.get( "features" );
+        try {
+            // read in json from the USGS earthquake feed to bring back the earthquakes over mag 5 in the last 30 days
+            Object obj = slurper.parse(
+                    new URL( "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=300&minmagnitude=5" ) ); // limited to 300 just incase
+
+            // search for the features and extract
+            if ( obj instanceof Map ) {
+                Map jsonMap = ( Map ) obj;
+                // get the features
+                if ( jsonMap.containsKey( "features" ) ) {
+                    features = ( List ) jsonMap.get( "features" );
+                }
             }
+        } catch ( Exception e ) {
+            System.out.println( String.format( "-- Error querying web service on Thread %s", Thread.currentThread().getName() ) );
+            System.out.println( String.format( "--- %s", e.getMessage() ) );
         }
         return features;
     }

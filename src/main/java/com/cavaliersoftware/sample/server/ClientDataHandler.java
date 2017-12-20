@@ -41,7 +41,7 @@ public class ClientDataHandler implements Runnable {
             // get the output stream from the socket
             OutputStream outputStream = client.getOutputStream();
 
-            // every 30s, send some data if necessary
+            // every 60s, send some data if necessary
             while ( running ) {
                 int data = 0x00;
                 // get the latest earthquake data
@@ -62,7 +62,7 @@ public class ClientDataHandler implements Runnable {
                 outputStream.write( data );
                 // pause the Thread to wait before checking and sending again
                 try {
-                    Thread.sleep( 30000 );   // 30 seconds
+                    Thread.sleep( 60000 );   // 60 seconds
                 } catch ( InterruptedException e ) {
                     // end loop if we get cancelled
                     running = false;
