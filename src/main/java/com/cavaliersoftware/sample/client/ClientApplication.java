@@ -49,7 +49,7 @@ public class ClientApplication extends WindowAdapter {
                     System.out.println( String.format( "--- Read data : %s", result )  );
                     // if we read -1, quit out of the loop
                     if ( result == -1 ) {
-                        running = false;
+                        break;
                     }
                 }
 
