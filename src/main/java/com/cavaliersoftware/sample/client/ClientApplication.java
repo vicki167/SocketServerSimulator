@@ -61,9 +61,15 @@ public class ClientApplication extends WindowAdapter {
                     alertListeners( event );
                 }
             }
-            socket.close();
         } catch ( Exception e ) {
             e.printStackTrace();
+        } finally {
+            try {
+                System.out.println( "--- Closing socket connection");
+                socket.close();
+            } catch ( IOException e ) {
+                // ok to ignore
+            }
         }
     }
 
