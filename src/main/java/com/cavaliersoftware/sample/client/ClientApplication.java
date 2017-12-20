@@ -67,6 +67,7 @@ public class ClientApplication extends WindowAdapter {
             try {
                 System.out.println( "--- Closing socket connection");
                 socket.close();
+                alertListeners( new MaskEvent( Integer.MIN_VALUE ) ); // let the listeners know we are done
             } catch ( IOException e ) {
                 // ok to ignore
             }
