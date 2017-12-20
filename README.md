@@ -28,7 +28,7 @@ done to ease testing and maintain an API that could be used in the future.
 
 ## Build instructions
 
-'gradlew install'
+'gradlew test install'
 
 ## Executing
 
