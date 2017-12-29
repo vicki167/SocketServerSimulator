@@ -66,7 +66,9 @@ public class ClientApplication extends WindowAdapter {
         } finally {
             try {
                 System.out.println( "--- Closing socket connection");
-                socket.close();
+                if ( socket != null  ) {
+                    socket.close();
+                }
                 alertListeners( new MaskEvent( Integer.MIN_VALUE ) ); // let the listeners know we are done
             } catch ( IOException e ) {
                 // ok to ignore
@@ -107,7 +109,7 @@ public class ClientApplication extends WindowAdapter {
 
         try {
             // create the listener to write the data to a file
-            File file = new File( "earthquakes.csv" );
+            File file = new File( "earthquakes2.csv" );
             if ( file.exists() ) {
                 file.delete();
             }
